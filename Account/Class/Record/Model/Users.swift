@@ -15,28 +15,28 @@ let realmQueue = dispatch_queue_create("com.YourApp.YourQueue", dispatch_queue_a
 
 
 class Users: Object {
-    // 用户名
-    dynamic var userNames = ""
-    
-    // 购买次数
-    dynamic var buyNums = ""
-    
-    // 目前积分
-    dynamic var nowIntegral = ""
-    
-    // 增长积分
-    dynamic var increment = ""
-    
-    // 减少积分
-    dynamic var decrement = ""
-    
-    // 历史积分
-    dynamic var history = ""
-    
-    // 记录时间
-    dynamic var recordTime = ""
-    
-    // 更新时间
-    dynamic var updateTime = ""
+//    // 用户名
+//    dynamic var userNames = ""
+//    
+//    // 购买次数
+//    dynamic var buyNums = ""
+//    
+//    // 目前积分
+//    dynamic var nowIntegral = ""
+//    
+//    // 增长积分
+//    dynamic var increment = ""
+//    
+//    // 减少积分
+//    dynamic var decrement = ""
+//    
+//    // 历史积分
+//    dynamic var history = ""
+//    
+//    // 记录时间
+//    dynamic var recordTime = ""
+//    
+//    // 更新时间
+//    dynamic var updateTime = ""
     
 }

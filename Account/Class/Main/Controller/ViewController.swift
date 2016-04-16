@@ -11,7 +11,7 @@ import RealmSwift
 
 class ViewController: UIViewController {
     
-    var user : Results<Users>!
+    var user : Results<UserFeature>!
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     }
     
     func searchUser()  {
-        self.user = realm.objects(Users)
+        self.user = realm.objects(UserFeature)
         self.tableView.reloadData()
     }
     
@@ -36,7 +36,6 @@ class ViewController: UIViewController {
     @IBAction func addRecord(sender: AnyObject) {
         let board = UIStoryboard(name: "Main", bundle: nil)
         let record = board.instantiateViewControllerWithIdentifier("detail") as! RecordTableViewController
-        record.types = 1
     
         self.navigationController?.pushViewController(record, animated: true)
         
@@ -44,13 +43,9 @@ class ViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "record" {
-            
-            if let indexPath = tableView.indexPathForSelectedRow {
-                let model = self.user[indexPath.row]
-                let destinationController = segue.destinationViewController as! RecordTableViewController
-                destinationController.record = model
-                destinationController.types = 0
-            }
+                let model = self.user
+                let destinationController = segue.destinationViewController as! RecordListViewController
+                destinationController.userFeatures = model
         }
     }
 
@@ -88,8 +83,7 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("listCell", forIndexPath: indexPath) as! RecordListTableViewCell
         
-        cell.recordUsers.text = self.user[indexPath.row].userNames
-        cell.recordNums.text = self.user[indexPath.row].history
+        cell.recordNums.text = self.user[indexPath.row].name
         
         return cell
     }

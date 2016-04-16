@@ -11,6 +11,8 @@ import UIKit
 
 class Common {
     
+    // 此线程更新数据
+    let realmQueue = dispatch_queue_create("com.YourApp.YourQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_UTILITY, 0))
     // 将系统当前时间转换为时间戳
     static func systemDateToString() -> String {
         

@@ -35,7 +35,5 @@ class UserFeature: Object {
     // 记录时间
     dynamic var recordTime = ""
     
-    // 与用户表建立关联
-    dynamic var userName = User()
-    
+      
 }

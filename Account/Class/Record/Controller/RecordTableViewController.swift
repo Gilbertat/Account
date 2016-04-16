@@ -10,16 +10,21 @@ import UIKit
 import RealmSwift
 
 class RecordTableViewController: UITableViewController, UITextFieldDelegate {
-    var user : Results<Users>!
-    var record:Users!
-    var types:Int!
-    @IBOutlet weak var nameTextField: UITextField!
-    @IBOutlet weak var numbersTextField: UITextField!
-    @IBOutlet weak var internelTextField: UITextField!
-    @IBOutlet weak var incrementTextField: UITextField!
-    @IBOutlet weak var decrementTextField: UITextField!
+  
     
+    // 用户名
+    @IBOutlet weak var nameTextField: UITextField!
+    // 商品名称
+    @IBOutlet weak var numbersTextField: UITextField!
+    // 单价
+    @IBOutlet weak var internelTextField: UITextField!
+    // 数量
+    @IBOutlet weak var incrementTextField: UITextField!
+    // 消费金额
+    @IBOutlet weak var decrementTextField: UITextField!
+    // 积分
     @IBOutlet weak var historyTextField: UITextField!
+    // 记录时间
     @IBOutlet weak var recordTimeTextField: UITextField!
     
     override func viewDidLoad() {
@@ -34,18 +39,9 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
    
         let systime:NSString = Common.systemDateToString()
         self.recordTimeTextField.text = Common.stringToDate(systime.doubleValue)
+        self.decrementTextField.text = "0"
+        self.historyTextField.text = "0"
         
-        
-    }
-    
-    func loadData() {
-        self.nameTextField.text = record.userNames
-        self.numbersTextField.text = record.buyNums
-        self.internelTextField.text = record.nowIntegral
-        self.incrementTextField.text = record.increment
-        self.decrementTextField.text = record.decrement
-        self.historyTextField.text = record.history
-        self.recordTimeTextField.text = record.recordTime
     }
     
     func validateFields() -> Bool {
@@ -73,46 +69,47 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     
     @IBAction func saveUsers(sender: AnyObject) {
         if validateFields() {
-            if record == nil {
-                self.addNewRecord()
-            } else {
-                self.updateRecord()
-            }
+            addNewRecord()
+            let alertController = UIAlertController(title: "注意啦", message: "保存后将无法更改,请慎重点击确定哦!", preferredStyle: .Alert)
+            let okAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (action) in
+                self.navigationController?.popViewControllerAnimated(true)
+            })
+            alertController.addAction(okAction)
+            self.presentViewController(alertController, animated: true, completion: nil)
         }
-        self.navigationController?.popViewControllerAnimated(true)
     }
     
     func addNewRecord() {
+        dispatch_async(realmQueue) { 
+            
+            let realm = try! Realm()
+
+            let newRecord = UserFeature()
+            newRecord.name = self.nameTextField.text!
+            newRecord.proName = self.numbersTextField.text!
+            newRecord.unitPrice = self.internelTextField.text!
+            newRecord.count = self.incrementTextField.text!
+            let all = (Int(self.internelTextField.text!)! * Int(self.incrementTextField.text!)!)
+            newRecord.cost = "\(all)"
+            newRecord.credit = "\(all)"
+            newRecord.recordTime = self.recordTimeTextField.text!
+            newRecord.allCredit = "\(all)"
+            try! realm.write {
+                realm.add(newRecord)
+            }
+        }
         
-        let newRecord = Users()
-        
-        newRecord.userNames = self.nameTextField.text!
-        newRecord.buyNums = self.numbersTextField.text!
-        newRecord.nowIntegral = self.internelTextField.text!
-        newRecord.increment = self.incrementTextField.text!
-        newRecord.decrement = self.decrementTextField.text!
-        newRecord.history = self.historyTextField.text!
-        newRecord.recordTime = self.recordTimeTextField.text!
-        newRecord.updateTime = self.recordTimeTextField.text!
-        
-        try! realm.write {
-            realm.add(newRecord)
+        // 添加用户名
+        dispatch_async(realmQueue) {
+            let realm = try! Realm()
+            let newUser = User()
+            newUser.name = self.nameTextField.text!
+            try! realm.write{
+                realm.add(newUser)
+            }
         }
     }
     
-    func updateRecord() {
-        try! realm.write {
-            self.record.userNames = self.nameTextField.text!
-            self.record.buyNums = self.numbersTextField.text!
-            self.record.nowIntegral = self.internelTextField.text!
-            self.record.increment = self.incrementTextField.text!
-            self.record.decrement = self.decrementTextField.text!
-            self.record.history = self.historyTextField.text!
-            self.record.recordTime = self.recordTimeTextField.text!
-            self.record.updateTime = self.recordTimeTextField.text!
-        }
-    }
-
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

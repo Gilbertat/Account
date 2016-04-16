@@ -6,4 +6,3 @@ use_frameworks!
 target 'Account' do
   pod 'RealmSwift'
 end
-
