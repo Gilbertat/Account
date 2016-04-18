@@ -27,6 +27,9 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     // 记录时间
     @IBOutlet weak var recordTimeTextField: UITextField!
     
+    var user:User!
+    var name = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,7 +38,8 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
         tableView.estimatedRowHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.tableFooterView = UIView(frame: CGRectZero)
-
+        
+        self.user = User()
    
         let systime:NSString = Common.systemDateToString()
         self.recordTimeTextField.text = Common.stringToDate(systime.doubleValue)
@@ -45,7 +49,6 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     }
     
     func validateFields() -> Bool {
-        let name = nameTextField.text!
         let numbers = numbersTextField.text!
         let internel = internelTextField.text!
         let increment = incrementTextField.text!
@@ -53,7 +56,7 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
         let history = historyTextField.text!
         let record = recordTimeTextField.text!
         
-        if name == "" || numbers == "" || internel == "" || increment == "" || decrement == "" || history == "" || record == "" {
+        if numbers == "" || internel == "" || increment == "" || decrement == "" || history == "" || record == "" {
             
             let alertController = UIAlertController(title: "出错啦！！", message: "除了记录时间以外都是必填项目，请检查后在试了噜！", preferredStyle: .Alert)
             let okAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
@@ -80,12 +83,9 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     }
     
     func addNewRecord() {
-        dispatch_async(realmQueue) { 
-            
-            let realm = try! Realm()
-
+  
             let newRecord = UserFeature()
-            newRecord.name = self.nameTextField.text!
+        
             newRecord.proName = self.numbersTextField.text!
             newRecord.unitPrice = self.internelTextField.text!
             newRecord.count = self.incrementTextField.text!
@@ -94,20 +94,12 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
             newRecord.credit = "\(all)"
             newRecord.recordTime = self.recordTimeTextField.text!
             newRecord.allCredit = "\(all)"
+        
             try! realm.write {
+                self.user.feature.append(newRecord)
                 realm.add(newRecord)
             }
-        }
         
-        // 添加用户名
-        dispatch_async(realmQueue) {
-            let realm = try! Realm()
-            let newUser = User()
-            newUser.name = self.nameTextField.text!
-            try! realm.write{
-                realm.add(newUser)
-            }
-        }
     }
     
 
@@ -165,9 +157,7 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
-        if textField == nameTextField {
-            numbersTextField.becomeFirstResponder()
-        } else if textField == numbersTextField {
+        if textField == numbersTextField {
             internelTextField.becomeFirstResponder()
         } else if textField == internelTextField{
             incrementTextField.becomeFirstResponder()
@@ -178,6 +168,7 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
         } else {
             textField.resignFirstResponder()
         }
+        
         return true
     }
 

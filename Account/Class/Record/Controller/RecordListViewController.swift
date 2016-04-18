@@ -14,6 +14,8 @@ class RecordListViewController: UIViewController {
     var userFeatures:Results<UserFeature>!
     var creditNum = 0
     
+    
+    
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()

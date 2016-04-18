@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        
+        print(NSHomeDirectory())
         
         //更改state主题为白色，需配合plist中添加字段View controller-based status bar appearance,属性为NO
         UIApplication.sharedApplication().statusBarStyle = .LightContent

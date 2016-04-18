@@ -10,10 +10,7 @@ import Foundation
 import RealmSwift
 
 class UserFeature: Object {
-    
-    // 用户名
-    dynamic var name = ""
-    
+        
     // 商品名
     dynamic var proName = ""
     
