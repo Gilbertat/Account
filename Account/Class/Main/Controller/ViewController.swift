@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.tableFooterView = UIView(frame: CGRectZero)
         
+        
     }
     
     func searchUser()  {
