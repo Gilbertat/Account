@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     
     var user : Results<User>!
     var userFeature: Results<UserFeature>!
+    var result:User!
     var creditNum = 0
     
     @IBOutlet weak var tableView: UITableView!
@@ -25,51 +26,41 @@ class ViewController: UIViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.tableFooterView = UIView(frame: CGRectZero)
         
-        
     }
     
     func searchUser()  {
         self.user = realm.objects(User)
         self.userFeature = realm.objects(UserFeature)
-        if userFeature.count != 0 {
-            reciveNum()
-        }
         self.tableView.reloadData()
     }
     
-    
-
+   
     @IBAction func addRecord(sender: AnyObject) {
         let board = UIStoryboard(name: "Main", bundle: nil)
         let record = board.instantiateViewControllerWithIdentifier("detail") as! RecordTableViewController
-        if let indexPath = tableView.indexPathForSelectedRow {
-            record.name = user[indexPath.row].name
-        }
-    
         self.navigationController?.pushViewController(record, animated: true)
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "record" {
-                let model = self.userFeature
-                let destinationController = segue.destinationViewController as! RecordListViewController
-                destinationController.userFeatures = model
-        }
-    }
-
-    func reciveNum() {
-        for num in 0 ..< userFeature.count {
-            creditNum += Int(userFeature[num].allCredit)!
-        }
-    }
-
     override func viewWillAppear(animated: Bool) {
         self.searchUser()
         self.tableView.dataSource = self
         self.tableView.delegate = self
     }
     
+    @IBAction func didSelectSortCriteria(sender: UISegmentedControl) {
+        
+        if sender.selectedSegmentIndex == 0 {
+            // 姓名
+            self.user = self.user.sorted("name")
+        } else {
+            // 积分
+            self.user = self.user.sorted("creditValue")
+        }
+        
+        self.tableView.reloadData()
+        
+    }
     
        override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -120,7 +111,8 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource {
         let cell = tableView.dequeueReusableCellWithIdentifier("listCell", forIndexPath: indexPath) as! RecordListTableViewCell
         
         cell.recordUsers.text = self.user[indexPath.row].name
-        cell.recordNums.text = "\(creditNum)"
+        
+        cell.recordNums.text = "\(self.user[indexPath.row].creditValue)"
         
         
         return cell
@@ -138,6 +130,7 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource {
             try! realm.write({ () -> Void in
                 realm.delete(listToBeDeleted)
                 self.searchUser()
+                
             })
             
         }
@@ -147,6 +140,15 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        self.performSegueWithIdentifier("record", sender: self.user[indexPath.row])
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let destinationController = segue.destinationViewController as! RecordListViewController
+//        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationController.user = sender as! User
+        
+    }
+
 }
 

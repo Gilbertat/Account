@@ -13,24 +13,53 @@ class RecordListViewController: UIViewController {
 
     var userFeatures:Results<UserFeature>!
     var creditNum = 0
-    
+    var user:User!
+  
     
     
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = user.name
+        
         tableView.tableFooterView = UIView(frame: CGRectZero)
     }
     
     override func viewWillAppear(animated: Bool) {
-        reciveNum()
+        collectData()
     }
     
-    func reciveNum() {
-        for num in 0 ..< userFeatures.count {
-            creditNum += Int(userFeatures[num].allCredit)!
+    @IBAction func addDetail(sender: AnyObject) {
+        let board = UIStoryboard(name: "Main", bundle: nil)
+        let record = board.instantiateViewControllerWithIdentifier("detail") as! RecordTableViewController
+        record.user = self.user
+        self.navigationController?.pushViewController(record, animated: true)
+
+    }
+    
+    // 取出数据
+    func collectData() {
+        self.userFeatures = self.user.feature.filter("isNew = true")
+        self.creditNum = self.userFeatures.sum("credit")
+        saveCredit(creditNum, updateValue: user)
+        self.tableView.reloadData()
+    }
+    
+       
+    // 更新总分
+    func saveCredit(value:Int, updateValue:User!) {
+        try! realm.write({
+            updateValue.creditValue = value
+        })
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let destinationController = segue.destinationViewController as! RecordFeatureTableViewController
+        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationController.userRecord = userFeatures[indexPath.row]
         }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,9 +86,14 @@ extension RecordListViewController:UITableViewDelegate,UITableViewDataSource {
         let cell = tableView.dequeueReusableCellWithIdentifier("recordListCell", forIndexPath: indexPath) as! RecordListCell
         
         cell.timeLabel.text = userFeatures[indexPath.row].recordTime
-        cell.pointLabel.text = "\(creditNum)"
+        cell.pointLabel.text = "\(userFeatures[indexPath.row].credit)"
         
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
+   
 }

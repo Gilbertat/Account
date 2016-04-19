@@ -39,7 +39,6 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.tableFooterView = UIView(frame: CGRectZero)
         
-        self.user = User()
    
         let systime:NSString = Common.systemDateToString()
         self.recordTimeTextField.text = Common.stringToDate(systime.doubleValue)
@@ -72,9 +71,9 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     
     @IBAction func saveUsers(sender: AnyObject) {
         if validateFields() {
-            addNewRecord()
-            let alertController = UIAlertController(title: "注意啦", message: "保存后将无法更改,请慎重点击确定哦!", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "请注意", message: "保存后将无法更改,请慎重点击确定!", preferredStyle: .Alert)
             let okAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (action) in
+                self.addNewRecord()
                 self.navigationController?.popViewControllerAnimated(true)
             })
             alertController.addAction(okAction)
@@ -83,21 +82,21 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     }
     
     func addNewRecord() {
-  
-            let newRecord = UserFeature()
         
+            let newRecord = UserFeature()
+            newRecord.name = self.user.name
             newRecord.proName = self.numbersTextField.text!
             newRecord.unitPrice = self.internelTextField.text!
             newRecord.count = self.incrementTextField.text!
             let all = (Int(self.internelTextField.text!)! * Int(self.incrementTextField.text!)!)
             newRecord.cost = "\(all)"
-            newRecord.credit = "\(all)"
+            newRecord.credit = all
+        
             newRecord.recordTime = self.recordTimeTextField.text!
             newRecord.allCredit = "\(all)"
         
             try! realm.write {
                 self.user.feature.append(newRecord)
-                realm.add(newRecord)
             }
         
     }

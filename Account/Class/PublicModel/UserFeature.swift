@@ -10,7 +10,10 @@ import Foundation
 import RealmSwift
 
 class UserFeature: Object {
-        
+    
+    // 用户名
+    dynamic var name = ""
+    
     // 商品名
     dynamic var proName = ""
     
@@ -24,13 +27,16 @@ class UserFeature: Object {
     dynamic var cost = ""
     
     // 积分
-    dynamic var credit = ""
+    dynamic var credit = 0
     
     // 总积分
     dynamic var allCredit = ""
     
     // 记录时间
     dynamic var recordTime = ""
+    
+    // 新纪录判断
+    dynamic var isNew = true
     
       
 }
