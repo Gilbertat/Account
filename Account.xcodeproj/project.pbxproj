@@ -225,6 +225,7 @@
 				9771E9BE1CB898A7006B6FF6 /* Resources */,
 				B1473B9B78B39DA18A77BD06 /* 📦 Embed Pods Frameworks */,
 				0A250E6C61D09C6C517F73A2 /* 📦 Copy Pods Resources */,
+				1D056E5CB439D1D032FB3C36 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -296,6 +297,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Account/Pods-Account-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1D056E5CB439D1D032FB3C36 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Account/Pods-Account-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6C32402C0A7A94EBAADEDA29 /* 📦 Check Pods Manifest.lock */ = {
@@ -466,7 +482,7 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Account/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.shiyue.Record;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Account.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Account/Class/Other/Account-Bridging-Header.h";
@@ -485,7 +501,7 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Account/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.shiyue.Record;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Account.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Account/Class/Other/Account-Bridging-Header.h";
