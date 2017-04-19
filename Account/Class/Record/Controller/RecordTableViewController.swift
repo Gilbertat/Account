@@ -88,9 +88,9 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
             newRecord.proName = self.numbersTextField.text!
             newRecord.unitPrice = self.internelTextField.text!
             newRecord.count = self.incrementTextField.text!
-            let all = (Int(self.internelTextField.text!)! * Int(self.incrementTextField.text!)!)
+            let all = (Float(self.internelTextField.text!)! * Float(self.incrementTextField.text!)!)
             newRecord.cost = "\(all)"
-            newRecord.credit = all
+            newRecord.credit = Int(all)
         
             newRecord.recordTime = self.recordTimeTextField.text!
             newRecord.allCredit = "\(all)"
@@ -111,6 +111,9 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    
+    
     
     // 进入界面,添加通知
     override func viewWillAppear(_ animated: Bool) {

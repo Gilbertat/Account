@@ -247,7 +247,7 @@
 				TargetAttributes = {
 					9771E9BF1CB898A7006B6FF6 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 9N99GRV8KF;
+						DevelopmentTeam = F6E84N5J28;
 						LastSwiftMigration = 0830;
 					};
 				};
@@ -469,9 +469,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = F6E84N5J28;
 				INFOPLIST_FILE = Account/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Account.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bjljdy.lishifulishe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Account/Class/Other/Account-Bridging-Header.h";
@@ -488,9 +489,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = F6E84N5J28;
 				INFOPLIST_FILE = Account/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Account.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bjljdy.lishifulishe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Account/Class/Other/Account-Bridging-Header.h";

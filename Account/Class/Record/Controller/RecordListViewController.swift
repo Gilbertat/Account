@@ -82,6 +82,25 @@ extension RecordListViewController:UITableViewDelegate,UITableViewDataSource {
         return 0
     }
     
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteAction = UITableViewRowAction(style: .destructive , title: "Delete") { (deleteAction, indexPath) -> Void in
+            
+            //Deletion will go here
+            
+            let listToBeDeleted = self.userFeatures[indexPath.row]
+            
+            try! realm.write({ () -> Void in
+                realm.delete(listToBeDeleted)                
+            })
+            
+            self.tableView.reloadData()
+            
+        }
+        return [deleteAction]
+        
+    }
+
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "recordListCell", for: indexPath) as! RecordListCell
         
