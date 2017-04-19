@@ -13,19 +13,19 @@ class SQLiteManager {
     static let sharedManager = SQLiteManager()
     
     // 数据库句柄：COpaquePointer(含糊的指针)通常是一个结构体指针
-    private var db:COpaquePointer = nil
+    fileprivate var db:OpaquePointer? = nil
     
     /**
      打开数据库
      
      - parameter dbName: 数据库名称
      */
-    func openDB(dbName:String) {
+    func openDB(_ dbName:String) {
         // 获取沙盒路径
-        let documentPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).last! as NSString
+        let documentPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last! as NSString
         
         // 获取数据库完整路径
-        let path = documentPath.stringByAppendingPathComponent(dbName)
+        let path = documentPath.appendingPathComponent(dbName)
         
         /*
          参数:
@@ -53,7 +53,7 @@ class SQLiteManager {
      
      - returns: sql语句是否执行成功
      */
-    internal func execSql(sql: String) -> Bool {
+    internal func execSql(_ sql: String) -> Bool {
         
         /**
          sqlite执行语句

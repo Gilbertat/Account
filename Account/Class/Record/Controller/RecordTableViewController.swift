@@ -37,10 +37,10 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
 
         tableView.estimatedRowHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.tableFooterView = UIView(frame: CGRectZero)
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
         
    
-        let systime:NSString = Common.systemDateToString()
+        let systime:NSString = Common.systemDateToString() as NSString
         self.recordTimeTextField.text = Common.stringToDate(systime.doubleValue)
         self.decrementTextField.text = "0"
         self.historyTextField.text = "0"
@@ -57,10 +57,10 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
         
         if numbers == "" || internel == "" || increment == "" || decrement == "" || history == "" || record == "" {
             
-            let alertController = UIAlertController(title: "出错啦！！", message: "除了记录时间以外都是必填项目，请检查后在试了噜！", preferredStyle: .Alert)
-            let okAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+            let alertController = UIAlertController(title: "出错啦！！", message: "除了记录时间以外都是必填项目，请检查后在试了噜！", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
             alertController .addAction(okAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true, completion: nil)
             
             return false
         } else {
@@ -69,15 +69,15 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     }
     
     
-    @IBAction func saveUsers(sender: AnyObject) {
+    @IBAction func saveUsers(_ sender: AnyObject) {
         if validateFields() {
-            let alertController = UIAlertController(title: "请注意", message: "保存后将无法更改,请慎重点击确定!", preferredStyle: .Alert)
-            let okAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (action) in
+            let alertController = UIAlertController(title: "请注意", message: "保存后将无法更改,请慎重点击确定!", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "确定", style: .cancel, handler: { (action) in
                 self.addNewRecord()
-                self.navigationController?.popViewControllerAnimated(true)
+                self.navigationController?.popViewController(animated: true)
             })
             alertController.addAction(okAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true, completion: nil)
         }
     }
     
@@ -108,12 +108,12 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     }
     
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     // 进入界面,添加通知
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(RecordTableViewController.keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(RecordTableViewController.keyboardWillHideNotification(_:)), name: UIKeyboardWillHideNotification, object: nil)
@@ -121,7 +121,7 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
     }
     
     // 离开界面，销毁通知
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
        // NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -150,11 +150,11 @@ class RecordTableViewController: UITableViewController, UITextFieldDelegate {
 //    }
     
     // 键盘相关
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         textField.layoutIfNeeded()
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         if textField == numbersTextField {
             internelTextField.becomeFirstResponder()

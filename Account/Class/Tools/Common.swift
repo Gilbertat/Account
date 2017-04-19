@@ -12,11 +12,12 @@ import UIKit
 class Common {
     
     // 此线程更新数据
-    let realmQueue = dispatch_queue_create("com.YourApp.YourQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_UTILITY, 0))
+    let realmQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+
     // 将系统当前时间转换为时间戳
     static func systemDateToString() -> String {
         
-        let date = NSDate(timeIntervalSinceNow: 0)
+        let date = Date(timeIntervalSinceNow: 0)
         let dateString = String(format: "%.f", date.timeIntervalSince1970)
         return dateString
         
@@ -29,18 +30,18 @@ class Common {
      
      - returns: 返回转化后的时间戳
      */
-    static func dateToString(nowDate:String) -> String {
+    static func dateToString(_ nowDate:String) -> String {
         
-        let formatter = NSDateFormatter()
+        let formatter = DateFormatter()
         // 设置时间格式
         formatter.dateFormat = "YYYY-MM-dd"
         // 设置时区
-        let timeZone = NSTimeZone(name: "Asia/Shanghai")
+        let timeZone = TimeZone(identifier: "Asia/Shanghai")
         
         formatter.timeZone = timeZone
         
         // 将字符串根据时间格式转换为date
-        let date = formatter.dateFromString(nowDate)
+        let date = formatter.date(from: nowDate)
         
         let dateString = String(format: "%.f", date!.timeIntervalSince1970)
         
@@ -50,15 +51,15 @@ class Common {
     
     // 将时间戳转换为时间
     
-    static func stringToDate(timeValue:Double) -> String {
+    static func stringToDate(_ timeValue:Double) -> String {
         
-        let formatter = NSDateFormatter()
+        let formatter = DateFormatter()
         formatter.dateFormat = "YYYY-MM-dd"
-        let timeZone = NSTimeZone(name: "Asia/Shanghai")
+        let timeZone = TimeZone(identifier: "Asia/Shanghai")
         formatter.timeZone = timeZone
         
-        let date = NSDate(timeIntervalSince1970: timeValue)
-        let nowDate = formatter.stringFromDate(date)
+        let date = Date(timeIntervalSince1970: timeValue)
+        let nowDate = formatter.string(from: date)
         
         return nowDate
     }

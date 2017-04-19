@@ -24,7 +24,7 @@ class RecordFeatureTableViewController: UITableViewController {
         
         tableView.estimatedRowHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.tableFooterView = UIView(frame: CGRectZero)
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
         showData()
         
     }

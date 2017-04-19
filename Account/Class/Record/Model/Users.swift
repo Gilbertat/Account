@@ -11,7 +11,7 @@ import RealmSwift
 
 
 // 总是在此线程更新realm
-let realmQueue = dispatch_queue_create("com.YourApp.YourQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_UTILITY, 0))
+let realmQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
 
 
 class Users: Object {

@@ -20,6 +20,7 @@
 #define REALM_LIST_HPP
 
 #include "collection_notifications.hpp"
+#include "impl/collection_notifier.hpp"
 
 #include <realm/link_view_fwd.hpp>
 #include <realm/row.hpp>
@@ -34,7 +35,12 @@ class ObjectSchema;
 class Query;
 class Realm;
 class Results;
-struct SortOrder;
+class SortDescriptor;
+template <typename T> class ThreadSafeReference;
+
+namespace _impl {
+class ListNotifier;
+}
 
 class List {
 public:
@@ -42,8 +48,14 @@ public:
     List(std::shared_ptr<Realm> r, LinkViewRef l) noexcept;
     ~List();
 
+    List(const List&);
+    List& operator=(const List&);
+    List(List&&);
+    List& operator=(List&&);
+
     const std::shared_ptr<Realm>& get_realm() const { return m_realm; }
     Query get_query() const;
+    const ObjectSchema& get_object_schema() const;
     size_t get_origin_row_index() const;
 
     bool is_valid() const;
@@ -65,12 +77,25 @@ public:
 
     void delete_all();
 
-    Results sort(SortOrder order);
+    Results sort(SortDescriptor order);
     Results filter(Query q);
+
+    // Return a Results representing a snapshot of this List.
+    Results snapshot() const;
+
+    // Get the min/max/average/sum of the given column
+    // All but sum() returns none when there are zero matching rows
+    // sum() returns 0, except for when it returns none
+    // Throws UnsupportedColumnTypeException for sum/average on timestamp or non-numeric column
+    // Throws OutOfBoundsIndexException for an out-of-bounds column
+    util::Optional<Mixed> max(size_t column);
+    util::Optional<Mixed> min(size_t column);
+    util::Optional<Mixed> average(size_t column);
+    util::Optional<Mixed> sum(size_t column);
 
     bool operator==(List const& rgt) const noexcept;
 
-    NotificationToken add_notification_callback(CollectionChangeCallback cb);
+    NotificationToken add_notification_callback(CollectionChangeCallback cb) &;
 
     // These are implemented in object_accessor.hpp
     template <typename ValueType, typename ContextType>
@@ -85,21 +110,24 @@ public:
     // The List object has been invalidated (due to the Realm being invalidated,
     // or the containing object being deleted)
     // All non-noexcept functions can throw this
-    struct InvalidatedException {};
+    struct InvalidatedException : public std::logic_error {
+        InvalidatedException() : std::logic_error("Access to invalidated List object") {}
+    };
 
     // The input index parameter was out of bounds
-    struct OutOfBoundsIndexException {
+    struct OutOfBoundsIndexException : public std::out_of_range {
+        OutOfBoundsIndexException(size_t r, size_t c);
         size_t requested;
         size_t valid_count;
     };
 
-    // The input Row object is not attached
-    struct DetatchedAccessorException { };
-
 private:
+    friend ThreadSafeReference<List>;
+
     std::shared_ptr<Realm> m_realm;
+    mutable const ObjectSchema* m_object_schema = nullptr;
     LinkViewRef m_link_view;
-    std::shared_ptr<_impl::CollectionNotifier> m_notifier;
+    _impl::CollectionNotifier::Handle<_impl::ListNotifier> m_notifier;
 
     void verify_valid_row(size_t row_ndx, bool insertion = false) const;
 

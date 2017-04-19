@@ -23,16 +23,16 @@ class RecordListViewController: UIViewController {
         
         self.title = user.name
         
-        tableView.tableFooterView = UIView(frame: CGRectZero)
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         collectData()
     }
     
-    @IBAction func addDetail(sender: AnyObject) {
+    @IBAction func addDetail(_ sender: AnyObject) {
         let board = UIStoryboard(name: "Main", bundle: nil)
-        let record = board.instantiateViewControllerWithIdentifier("detail") as! RecordTableViewController
+        let record = board.instantiateViewController(withIdentifier: "detail") as! RecordTableViewController
         record.user = self.user
         self.navigationController?.pushViewController(record, animated: true)
 
@@ -41,21 +41,21 @@ class RecordListViewController: UIViewController {
     // 取出数据
     func collectData() {
         self.userFeatures = self.user.feature.filter("isNew = true")
-        self.creditNum = self.userFeatures.sum("credit")
+        self.creditNum = self.userFeatures.sum(ofProperty: "credit")
         saveCredit(creditNum, updateValue: user)
         self.tableView.reloadData()
     }
     
        
     // 更新总分
-    func saveCredit(value:Int, updateValue:User!) {
+    func saveCredit(_ value:Int, updateValue:User!) {
         try! realm.write({
             updateValue.creditValue = value
         })
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let destinationController = segue.destinationViewController as! RecordFeatureTableViewController
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationController = segue.destination as! RecordFeatureTableViewController
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationController.userRecord = userFeatures[indexPath.row]
         }
@@ -71,19 +71,19 @@ class RecordListViewController: UIViewController {
 
 extension RecordListViewController:UITableViewDelegate,UITableViewDataSource {
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let userFeature = self.userFeatures {
             return userFeature.count
         }
         return 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("recordListCell", forIndexPath: indexPath) as! RecordListCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "recordListCell", for: indexPath) as! RecordListCell
         
         cell.timeLabel.text = userFeatures[indexPath.row].recordTime
         cell.pointLabel.text = "\(userFeatures[indexPath.row].credit)"
@@ -91,8 +91,8 @@ extension RecordListViewController:UITableViewDelegate,UITableViewDataSource {
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
    
